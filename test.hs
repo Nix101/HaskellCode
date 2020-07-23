@@ -1,11 +1,12 @@
-import Data.List (\\)  -- (\\) is set-difference for unordered lists
+module Main (main) where
 
-primesTo m = sieve [2..m]
-             where 
-             sieve (x:xs) = x : sieve (xs \\ [x,x+x..m])
-             sieve [] = []
-      -- or:
-           = ps 
-             where
-             ps = map head $ takeWhile (not.null) 
-                           $ scanl (\\) [2..m] [[p, p+p..m] | p <- ps]
+import System.Environment (getArgs)
+import Math.NumberTheory.Primes
+
+main :: IO ()
+main = do
+    args <- getArgs
+    let lim = case args of
+                (a:_) -> read a
+                _     -> 1000000
+    print . sum $ takeWhile (<= lim) primes
